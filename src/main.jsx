@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import "./index.css";
 import Home from "./pages/Home.jsx";
 import AddEdit from "./pages/AddEdit.jsx";
+import View from "./pages/View.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/update/:id",
     element: <AddEdit />,
+  },
+  {
+    path: "/view/:id",
+    element: <View />,
   },
 ]);
 
