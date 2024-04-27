@@ -12,6 +12,15 @@ const estadoInicial = {
 
 function AddEdit() {
   const navigate = useNavigate();
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/api/contacto/${id}}`)
+      .then((res) => setEstado({ ...res.data[0] }));
+  }, [id]);
+
   const [estado, setEstado] = useState(estadoInicial);
   const { nombre, correo, celular } = estado;
 
@@ -20,10 +29,37 @@ function AddEdit() {
     if (!nombre || !correo || !celular) {
       toast.error("Por favor complete los campos vacíos");
     } else {
-      // Seguir en casa
-      setTimeout(() => {
-        navigate("/");
-      }, 500);
+      if (!id) {
+        axios
+          .post("http://localhost:5000/api/contactos", {
+            nombre,
+            correo,
+            celular,
+          })
+          .then(() => {
+            setEstado({ nombre: "", correo: "", celular: "" });
+          })
+          .catch((error) => toast.error(error.response.data));
+        toast.success("Contacto agregado con éxito");
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
+      } else {
+        axios
+          .put(`http://localhost:5000/api/contacto/${id}`, {
+            nombre,
+            correo,
+            celular,
+          })
+          .then(() => {
+            setEstado({ nombre: "", correo: "", celular: "" });
+          })
+          .catch((error) => toast.error(error.response.data));
+        toast.success("Contacto actualizado con éxito");
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
+      }
     }
   };
 
@@ -41,7 +77,7 @@ function AddEdit() {
             id="nombre"
             name="nombre"
             placeholder="Tu nombre..."
-            value={nombre}
+            value={nombre || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -52,7 +88,7 @@ function AddEdit() {
             id="correo"
             name="correo"
             placeholder="Tu correo@ejemplo"
-            value={correo}
+            value={correo || ""}
             onChange={handleInputChange}
           />
         </div>
@@ -63,11 +99,11 @@ function AddEdit() {
             id="celular"
             name="celular"
             placeholder="123456789"
-            value={celular}
+            value={celular || ""}
             onChange={handleInputChange}
           />
         </div>
-        <button type="submit">Guardar</button>
+        <button type="submit">{id ? "Actualizar" : "Guardar"}</button>
         <Link to={"/"}>
           <button type="button">Regresar</button>
         </Link>

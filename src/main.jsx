@@ -16,6 +16,10 @@ const router = createBrowserRouter([
     path: "/addContact",
     element: <AddEdit />,
   },
+  {
+    path: "/update/:id",
+    element: <AddEdit />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -16,6 +16,16 @@ function Home() {
     getData();
   }, []);
 
+  const eliminarContacto = (id, nombre) => {
+    if (window.confirm(`¿Estás seguro de eliminar el contacto ${nombre}?`)) {
+      axios.delete(`http://localhost:5000/api/contacto/${id}}`);
+      toast.success(`Contacto ${nombre} eliminado con éxito`);
+      setTimeout(() => {
+        getData();
+      }, 500);
+    }
+  };
+
   return (
     <div>
       <Link to={"/addContact"}>
@@ -43,7 +53,10 @@ function Home() {
                   <Link to={`/update/${item.id}`}>
                     <button>Editar</button>
                   </Link>
-                  <button>Eliminar</button>
+                  <button
+                    onClick={() => eliminarContacto(item.id, item.nombre)}>
+                    Eliminar
+                  </button>
                   <Link to={`/view/${item.id}`}>
                     <button>Ver</button>
                   </Link>
